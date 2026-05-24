@@ -63,11 +63,15 @@ oaf-rag-build-project/
 │       └── rag-architecture.png   # Diagram referenced from architecture.md
 │
 ├── data/
-│   ├── sample_docs/               # Placeholder corpus (replaced Workshop 7)
-│   │   ├── sample_1.pdf
-│   │   ├── sample_2.txt
-│   │   └── sample_3.md
-│   └── README.md                  # How to add your own documents
+│   ├── sample_docs/               # Demo corpus — see data/README.md
+│   │   ├── rag_primer.md
+│   │   ├── chromadb_overview.txt
+│   │   ├── embeddings_explained.md
+│   │   ├── prompt_design_notes.md
+│   │   ├── evaluation_basics.md
+│   │   ├── rag_paper_summary.pdf
+│   │   └── apache_foundation_faq.md
+│   └── README.md                  # Corpus description + how to add your own
 │
 ├── src/
 │   └── rag/

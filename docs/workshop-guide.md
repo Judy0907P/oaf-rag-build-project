@@ -22,7 +22,7 @@ A per-week reading list and short reflection prompt. Pair this with
 ## Workshop 3 — Embeddings and Vector Database Indexing
 
 - Read: `src/rag/vectorstore/chroma_store.py`, the ChromaDB section of
-  `data/sample_docs/sample_2.txt`.
+  `data/sample_docs/chromadb_overview.txt`.
 - Do: implement `ChromaStore.add` and `ChromaStore.query`. Run the full
   `scripts/ingest.py` (without `--dry-run`).
 - Reflect: open `.chroma/`. What's in there? What do you think is recoverable
@@ -40,7 +40,7 @@ A per-week reading list and short reflection prompt. Pair this with
 ## Workshop 5 — LLM Integration and Prompt Design
 
 - Read: `src/rag/generation/prompts.py`, `pipeline.py`,
-  `data/sample_docs/sample_3.md`.
+  `data/sample_docs/prompt_design_notes.md`.
 - Do: implement `RAGPipeline.answer`. Run
   `uv run python scripts/query.py "What is RAG?"`.
 - Reflect: try removing the "if you don't know, say so" line from the prompt.
