@@ -11,7 +11,7 @@ The number of floats in a vector is its *dimension*. Common choices:
 
 - OpenAI `text-embedding-3-small` — 1536 dimensions
 - OpenAI `text-embedding-3-large` — 3072 dimensions
-- Gemini `text-embedding-004` — 768 dimensions
+- Gemini `gemini-embedding-2` — 3072 dimensions (truncatable via MRL)
 - `sentence-transformers/all-MiniLM-L6-v2` — 384 dimensions
 
 Higher dimensions can encode finer semantic distinctions but cost more to
