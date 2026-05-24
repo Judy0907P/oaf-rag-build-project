@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OAF RAG — Demo UI</title>
+  <style>
+    :root {
+      --bg: #0f1115;
+      --panel: #171a21;
+      --panel-2: #1e222b;
+      --border: #2a2f3a;
+      --text: #e6e8ec;
+      --muted: #8a94a6;
+      --accent: #7aa2ff;
+      --accent-2: #5b86f0;
+      --good: #4ade80;
+      --warn: #facc15;
+      --bad: #f87171;
+      --code-bg: #0b0d12;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      background: var(--bg); color: var(--text);
+      font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+    }
+    a { color: var(--accent); }
+    .app {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      grid-template-rows: 56px 1fr;
+      grid-template-areas:
+        "header header"
+        "sidebar main";
+      height: 100vh;
+    }
+    header {
+      grid-area: header;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 20px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--border);
+    }
+    header .title { font-weight: 600; letter-spacing: 0.2px; }
+    header .title .sub { color: var(--muted); font-weight: 400; margin-left: 8px; font-size: 13px; }
+    header .status { display: flex; gap: 14px; align-items: center; font-size: 13px; color: var(--muted); }
+    header .status .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); display: inline-block; margin-right: 6px; vertical-align: middle; }
+    header .status .dot.ok { background: var(--good); }
+    header .status .dot.bad { background: var(--bad); }
+    header .status code { background: var(--panel-2); padding: 2px 6px; border-radius: 4px; color: var(--text); }
+
+    aside {
+      grid-area: sidebar;
+      background: var(--panel);
+      border-right: 1px solid var(--border);
+      padding: 20px;
+      overflow-y: auto;
+    }
+    aside h3 {
+      margin: 0 0 12px;
+      font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted);
+    }
+    aside .field { margin-bottom: 18px; }
+    aside .field label {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 13px; margin-bottom: 6px; color: var(--text);
+    }
+    aside .field label .val { color: var(--muted); font-variant-numeric: tabular-nums; }
+    aside input[type="range"] { width: 100%; }
+    aside input[type="text"], aside input[type="number"], aside textarea {
+      width: 100%; background: var(--panel-2); color: var(--text);
+      border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px;
+      font: inherit;
+    }
+    aside .checkbox { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+    aside .divider { height: 1px; background: var(--border); margin: 20px -20px; }
+    aside details { font-size: 13px; }
+    aside details summary { cursor: pointer; color: var(--muted); margin-bottom: 10px; }
+    aside details summary:hover { color: var(--text); }
+    aside button.ingest {
+      width: 100%; padding: 8px 12px; border-radius: 6px; border: 1px solid var(--border);
+      background: var(--panel-2); color: var(--text); cursor: pointer; font: inherit;
+    }
+    aside button.ingest:hover { background: var(--border); }
+
+    main {
+      grid-area: main;
+      display: flex; flex-direction: column;
+      padding: 24px 32px;
+      overflow-y: auto;
+    }
+    .question-bar {
+      display: flex; gap: 10px; margin-bottom: 24px;
+    }
+    .question-bar textarea {
+      flex: 1; min-height: 56px; max-height: 200px; resize: vertical;
+      background: var(--panel); color: var(--text);
+      border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px;
+      font: inherit;
+    }
+    .question-bar textarea:focus { outline: none; border-color: var(--accent); }
+    .question-bar button {
+      background: var(--accent-2); color: white; border: none; border-radius: 8px;
+      padding: 0 22px; cursor: pointer; font: inherit; font-weight: 600;
+    }
+    .question-bar button:hover { background: var(--accent); }
+    .question-bar button:disabled { background: var(--border); cursor: not-allowed; color: var(--muted); }
+    .hint { color: var(--muted); font-size: 12px; margin-top: -16px; margin-bottom: 24px; }
+    .hint kbd { background: var(--panel-2); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--border); font-size: 11px; }
+
+    .answer-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px 22px;
+      margin-bottom: 18px;
+    }
+    .answer-card.empty { color: var(--muted); font-style: italic; }
+    .answer-card h2 {
+      margin: 0 0 12px; font-size: 12px; color: var(--muted);
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .answer-text { white-space: pre-wrap; }
+    .answer-card .meta { color: var(--muted); font-size: 12px; margin-top: 14px; }
+
+    .sources details { margin-bottom: 8px; }
+    .sources summary {
+      cursor: pointer; padding: 10px 14px; background: var(--panel);
+      border: 1px solid var(--border); border-radius: 8px;
+      list-style: none; user-select: none;
+    }
+    .sources summary::-webkit-details-marker { display: none; }
+    .sources summary .badge {
+      display: inline-block; min-width: 22px; height: 22px; line-height: 22px;
+      background: var(--panel-2); border-radius: 4px; text-align: center; color: var(--muted);
+      font-size: 12px; margin-right: 10px;
+    }
+    .sources summary .file { color: var(--text); }
+    .sources summary .chunk { color: var(--muted); margin-left: 8px; font-size: 12px; }
+    .sources .body {
+      padding: 12px 14px; background: var(--code-bg);
+      border: 1px solid var(--border); border-top: none;
+      border-radius: 0 0 8px 8px; white-space: pre-wrap; font-size: 13px;
+      color: var(--text);
+    }
+
+    .toast {
+      position: fixed; bottom: 24px; right: 24px;
+      background: var(--panel); border: 1px solid var(--border);
+      border-left: 3px solid var(--bad);
+      padding: 12px 16px; border-radius: 6px;
+      max-width: 420px; display: none;
+    }
+    .toast.show { display: block; }
+    .toast .label { color: var(--bad); font-weight: 600; font-size: 12px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 1px; }
+
+    .spinner {
+      display: inline-block; width: 14px; height: 14px;
+      border: 2px solid var(--border); border-top-color: var(--accent);
+      border-radius: 50%; animation: spin 0.8s linear infinite;
+      vertical-align: middle; margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 720px) {
+      .app { grid-template-columns: 1fr; grid-template-areas: "header" "main"; }
+      aside { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="title">OAF RAG <span class="sub">Document Q&amp;A demo</span></div>
+      <div class="status" id="status">
+        <span><span class="dot" id="status-dot"></span><span id="status-text">connecting…</span></span>
+        <span>LLM: <code id="status-llm">—</code></span>
+        <span>Embeddings: <code id="status-emb">—</code></span>
+        <span>Chunks: <code id="status-chunks">—</code></span>
+      </div>
+    </header>
+
+    <aside>
+      <h3>Retrieval</h3>
+      <div class="field">
+        <label>Top-K <span class="val" id="top-k-val">4</span></label>
+        <input type="range" id="top-k" min="1" max="20" value="4" />
+      </div>
+      <div class="field">
+        <label>Temperature <span class="val" id="temp-val">0.20</span></label>
+        <input type="range" id="temperature" min="0" max="100" value="20" />
+      </div>
+      <div class="field">
+        <label class="checkbox"><input type="checkbox" id="show-sources" checked /> Show source chunks</label>
+      </div>
+
+      <div class="divider"></div>
+
+      <h3>Ingest</h3>
+      <details>
+        <summary>Re-ingest the corpus</summary>
+        <div class="field">
+          <label>Path (optional)</label>
+          <input type="text" id="ingest-path" placeholder="defaults to data/sample_docs" />
+        </div>
+        <div class="field">
+          <label class="checkbox"><input type="checkbox" id="ingest-clear" /> Clear collection first</label>
+        </div>
+        <button class="ingest" id="ingest-btn">Run ingest</button>
+        <div class="field" id="ingest-result" style="margin-top: 10px; color: var(--muted); font-size: 12px;"></div>
+      </details>
+    </aside>
+
+    <main>
+      <div class="question-bar">
+        <textarea id="question" placeholder="Ask a question about the indexed documents…" rows="2"></textarea>
+        <button id="ask-btn">Ask</button>
+      </div>
+      <div class="hint">Press <kbd>⌘</kbd>+<kbd>Enter</kbd> (or <kbd>Ctrl</kbd>+<kbd>Enter</kbd>) to submit.</div>
+
+      <div class="answer-card empty" id="answer-card">
+        <h2>Answer</h2>
+        <div class="answer-text" id="answer-text">No question asked yet. Try: <em>"What is RAG?"</em></div>
+      </div>
+
+      <div class="sources" id="sources"></div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast">
+    <div class="label">Error</div>
+    <div id="toast-body"></div>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const topK = $("top-k"), topKVal = $("top-k-val");
+    const temperature = $("temperature"), tempVal = $("temp-val");
+    const showSources = $("show-sources");
+    const question = $("question");
+    const askBtn = $("ask-btn");
+    const answerCard = $("answer-card");
+    const answerText = $("answer-text");
+    const sourcesEl = $("sources");
+    const toast = $("toast"), toastBody = $("toast-body");
+    const ingestBtn = $("ingest-btn");
+    const ingestPath = $("ingest-path");
+    const ingestClear = $("ingest-clear");
+    const ingestResult = $("ingest-result");
+
+    topK.addEventListener("input", () => topKVal.textContent = topK.value);
+    temperature.addEventListener("input", () => tempVal.textContent = (temperature.value / 100).toFixed(2));
+
+    function showError(msg) {
+      toastBody.textContent = msg;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 6000);
+    }
+
+    async function refreshHealth() {
+      try {
+        const r = await fetch("/health");
+        if (!r.ok) throw new Error(`/health returned ${r.status}`);
+        const j = await r.json();
+        $("status-dot").className = "dot ok";
+        $("status-text").textContent = j.status;
+        $("status-llm").textContent = j.llm_provider;
+        $("status-emb").textContent = j.embeddings_provider;
+        $("status-chunks").textContent = j.indexed_chunks;
+      } catch (e) {
+        $("status-dot").className = "dot bad";
+        $("status-text").textContent = "offline";
+        showError(`Can't reach the API: ${e.message}`);
+      }
+    }
+
+    function renderSources(sources) {
+      sourcesEl.innerHTML = "";
+      if (!showSources.checked || !sources || sources.length === 0) return;
+      sources.forEach((src, i) => {
+        const d = document.createElement("details");
+        const s = document.createElement("summary");
+        s.innerHTML = `<span class="badge">${i + 1}</span><span class="file"></span><span class="chunk"></span>`;
+        s.querySelector(".file").textContent = src.source;
+        s.querySelector(".chunk").textContent = `chunk ${src.chunk_index}`;
+        const body = document.createElement("div");
+        body.className = "body";
+        body.textContent = src.text;
+        d.appendChild(s);
+        d.appendChild(body);
+        sourcesEl.appendChild(d);
+      });
+    }
+
+    async function ask() {
+      const q = question.value.trim();
+      if (!q) return;
+      askBtn.disabled = true;
+      answerCard.classList.remove("empty");
+      answerText.innerHTML = `<span class="spinner"></span>Thinking…`;
+      sourcesEl.innerHTML = "";
+      try {
+        const r = await fetch("/ask", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            question: q,
+            top_k: parseInt(topK.value, 10),
+            temperature: parseFloat(temperature.value) / 100,
+          }),
+        });
+        if (!r.ok) {
+          const detail = await r.text();
+          throw new Error(`HTTP ${r.status}: ${detail.slice(0, 200)}`);
+        }
+        const j = await r.json();
+        answerText.textContent = j.answer || "(empty answer)";
+        renderSources(j.sources);
+        refreshHealth();
+      } catch (e) {
+        answerCard.classList.add("empty");
+        answerText.textContent = "No answer — see error notification.";
+        showError(e.message);
+      } finally {
+        askBtn.disabled = false;
+      }
+    }
+
+    askBtn.addEventListener("click", ask);
+    question.addEventListener("keydown", (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); ask(); }
+    });
+
+    ingestBtn.addEventListener("click", async () => {
+      ingestBtn.disabled = true;
+      ingestResult.textContent = "Ingesting…";
+      try {
+        const body = { clear: ingestClear.checked };
+        if (ingestPath.value.trim()) body.path = ingestPath.value.trim();
+        const r = await fetch("/ingest", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        if (!r.ok) {
+          const detail = await r.text();
+          throw new Error(`HTTP ${r.status}: ${detail.slice(0, 200)}`);
+        }
+        const j = await r.json();
+        ingestResult.textContent = `Loaded ${j.documents_loaded} docs → ${j.chunks_created} chunks. Indexed total: ${j.chunks_indexed}.`;
+        refreshHealth();
+      } catch (e) {
+        ingestResult.textContent = "Ingest failed.";
+        showError(e.message);
+      } finally {
+        ingestBtn.disabled = false;
+      }
+    });
+
+    refreshHealth();
+  </script>
+</body>
+</html>

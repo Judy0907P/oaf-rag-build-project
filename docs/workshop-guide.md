@@ -64,3 +64,11 @@ A per-week reading list and short reflection prompt. Pair this with
 
 Bring a 5-minute walkthrough. Show one query that works well, and one that
 fails interestingly. Failure modes are the best part of demoing AI systems.
+
+The repo ships a lightweight browser UI for the demo — start the API with
+`uv run uvicorn rag.api.main:app --reload` and open
+<http://127.0.0.1:8000>. You get a question box, the answer pane, expandable
+source chunks, and sidebar controls for `top_k`, `temperature`, and an
+on-demand re-ingest. Live editing these during your demo is the easiest way
+to show off how the pipeline behaves. No new dependencies — it's a single
+static HTML file served by FastAPI.

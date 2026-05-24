@@ -4,16 +4,20 @@ Run locally::
 
     uv run uvicorn rag.api.main:app --reload
 
-Open http://127.0.0.1:8000/docs for the auto-generated Swagger UI.
+Then open:
+  - http://127.0.0.1:8000        → demo UI (``static/index.html``)
+  - http://127.0.0.1:8000/docs   → auto-generated Swagger UI
 """
 
 from __future__ import annotations
 
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from rag.api.routes import router
 from rag.generation.pipeline import RAGPipeline
@@ -21,6 +25,8 @@ from rag.providers.factory import get_embeddings, get_llm
 from rag.retrieval.retriever import Retriever
 from rag.utils.logging import get_logger
 from rag.vectorstore.chroma_store import ChromaStore
+
+STATIC_DIR = Path(__file__).parent / "static"
 
 log = get_logger(__name__)
 
@@ -66,6 +72,11 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
     app.include_router(router)
+    # Serve the demo UI at "/" — see src/rag/api/static/index.html.
+    # `html=True` makes StaticFiles serve index.html for "/" and 404 for unknown
+    # paths (so /ask, /ingest, /health still route to the API).
+    if STATIC_DIR.is_dir():
+        app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="ui")
     return app
 
 

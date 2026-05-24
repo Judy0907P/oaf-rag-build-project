@@ -38,9 +38,10 @@ uv run python scripts/ingest.py
 # 6. Ask a question
 uv run python scripts/query.py "What is RAG?"
 
-# 7. Or run the API
+# 7. Or run the API + demo UI
 uv run uvicorn rag.api.main:app --reload
-# Open http://127.0.0.1:8000/docs
+# Open http://127.0.0.1:8000        → demo UI (ask questions, see sources)
+# Open http://127.0.0.1:8000/docs   → Swagger UI for the raw API
 ```
 
 ## Layout
