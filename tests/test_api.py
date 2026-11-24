@@ -40,7 +40,6 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> Iterator[TestClie
         yield client
 
 
-@pytest.mark.skip(reason="Workshop 7: GET /health smoke test.")
 def test_health_endpoint(client: TestClient) -> None:
     response = client.get("/health")
     assert response.status_code == 200
@@ -72,7 +71,6 @@ def test_ask_with_empty_store_still_works(client: TestClient) -> None:
     assert "answer" in response.json()
 
 
-@pytest.mark.skip(reason="Workshop 7: ingest validates the path.")
 def test_ingest_validates_path(client: TestClient) -> None:
     response = client.post("/ingest", json={"path": "/no/such/path/exists"})
     assert response.status_code == 404

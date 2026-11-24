@@ -11,7 +11,6 @@ from rag.ingestion.models import Chunk
 from rag.vectorstore.chroma_store import ChromaStore
 
 
-@pytest.mark.skip(reason="Workshop 7: round-trip add() then query().")
 def test_add_then_query_round_trips(chroma_store: ChromaStore) -> None:
     chunks = [
         Chunk(text="apples are red fruit", source="fruit.md", chunk_index=0),
@@ -27,7 +26,6 @@ def test_add_then_query_round_trips(chroma_store: ChromaStore) -> None:
     assert results[0].chunk_index == 0
 
 
-@pytest.mark.skip(reason="Workshop 7: empty-query handling.")
 def test_query_empty_string_returns_empty(chroma_store: ChromaStore) -> None:
     assert chroma_store.query("", k=4) == []
 

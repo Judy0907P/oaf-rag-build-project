@@ -14,7 +14,6 @@ from rag.ingestion.loader import DocumentLoader
 from rag.ingestion.models import Document
 
 
-@pytest.mark.skip(reason="Workshop 7: un-skip after Workshop 2's loader is in place.")
 def test_loader_reads_text_file(tmp_path: Path) -> None:
     file = tmp_path / "doc.txt"
     file.write_text("hello world", encoding="utf-8")
@@ -57,7 +56,6 @@ def test_loader_missing_path_raises(tmp_path: Path) -> None:
         DocumentLoader().load(tmp_path / "missing.txt")
 
 
-@pytest.mark.skip(reason="Workshop 7: chunker overlap math.")
 def test_chunker_produces_overlapping_chunks() -> None:
     text = "ABCDEFGHIJKL"  # 12 chars
     chunker = Chunker(size=5, overlap=2)

@@ -1,0 +1,53 @@
+ONLINE ASSESSMENT IN EDTECH
+
+Assessment is how teachers and students find out what has been learned.
+EdTech has changed both how assessments are delivered and how quickly
+results come back.
+
+FORMATIVE VS. SUMMATIVE ASSESSMENT
+
+Formative assessment happens during learning. Its goal is feedback: a
+short quiz at the end of a lesson tells the student and teacher what to
+review next. Low-stakes online quizzes, polls during a lecture, and
+practice problems with instant feedback are all formative.
+
+Summative assessment happens at the end of a unit or course. Its goal is
+to measure what was learned, usually for a grade. Final exams and
+standardized tests are summative.
+
+Research on retrieval practice suggests that frequent low-stakes quizzes
+do more than measure learning: the act of recalling information
+strengthens memory, an effect often called the testing effect.
+
+AUTOMATIC GRADING
+
+Multiple-choice, numeric, and short exact-answer questions can be graded
+instantly. Programming assignments can be graded automatically by running
+the student's code against test cases. Free-text answers and essays are
+harder. Some platforms use machine learning or large language models to
+suggest scores, but these tools can be inconsistent and are usually best
+used to assist a human grader rather than replace one.
+
+ACADEMIC INTEGRITY
+
+Online exams make cheating easier to attempt and harder to detect.
+Common responses include:
+
+- Question banks that give each student a different set of questions.
+- Time limits and randomized question order.
+- Remote proctoring software that records webcam video or locks the
+  browser.
+- Open-book exam designs that test reasoning instead of recall.
+
+Remote proctoring is controversial. Students have raised concerns about
+privacy, about software that misreads normal behavior as suspicious, and
+about the stress of being recorded while testing. Many instructors now
+prefer redesigning assessments over increasing surveillance.
+
+GOOD PRACTICE
+
+Clear rubrics, fast feedback, and a mix of question types tend to produce
+assessments that are both fairer and more useful for learning. An
+assessment is only as good as the decision it supports: if the results
+never change what the teacher or student does next, the assessment is
+mostly paperwork.

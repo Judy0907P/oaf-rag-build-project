@@ -12,7 +12,6 @@ from rag.providers.factory import get_embeddings, get_llm
 from tests.conftest import MockEmbeddings, MockLLM
 
 
-@pytest.mark.skip(reason="Workshop 7: confirm Protocol compliance for the mock LLM.")
 def test_mock_llm_satisfies_protocol() -> None:
     """A duck-typed mock should isinstance-match the runtime-checkable Protocol."""
     assert isinstance(MockLLM(), LLMProvider)
@@ -23,7 +22,6 @@ def test_mock_embeddings_satisfies_protocol() -> None:
     assert isinstance(MockEmbeddings(), EmbeddingsProvider)
 
 
-@pytest.mark.skip(reason="Workshop 7: factory should reject unknown LLM provider names.")
 def test_factory_rejects_unknown_llm(monkeypatch: pytest.MonkeyPatch) -> None:
     """Factories should raise ValueError on unknown provider names."""
     from rag.config import settings

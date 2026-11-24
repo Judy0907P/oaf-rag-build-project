@@ -12,7 +12,6 @@ from rag.generation.prompts import RAG_PROMPT
 from rag.ingestion.models import Chunk
 
 
-@pytest.mark.skip(reason="Workshop 7: format_context renders chunks.")
 def test_format_context_renders_each_chunk() -> None:
     chunks = [
         Chunk(text="alpha", source="a.txt", chunk_index=0),
@@ -24,7 +23,6 @@ def test_format_context_renders_each_chunk() -> None:
     assert "a.txt" in rendered and "b.txt" in rendered
 
 
-@pytest.mark.skip(reason="Workshop 7: format_context handles empty input.")
 def test_format_context_handles_empty() -> None:
     assert "no context" in format_context([]).lower()
 

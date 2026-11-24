@@ -1,0 +1,47 @@
+ACCESSIBILITY IN EDTECH
+
+Accessibility means that people with disabilities can use a tool or
+resource as fully as anyone else. In education, an inaccessible course
+page or video can block a student from learning the material at all.
+
+WHY IT MATTERS
+
+Students may be blind or have low vision, be deaf or hard of hearing, have
+motor impairments that make a mouse difficult to use, or have cognitive
+and learning disabilities such as dyslexia or ADHD. Accessible design
+also helps many other learners: captions help students watching in a
+noisy place or learning in a second language, and clear structure helps
+everyone scan content quickly.
+
+STANDARDS AND LAWS
+
+The Web Content Accessibility Guidelines (WCAG), published by the World
+Wide Web Consortium (W3C), are the most widely used technical standard.
+WCAG is organized around four principles: content should be perceivable,
+operable, understandable, and robust.
+
+In the United States, the Americans with Disabilities Act and Section 504
+of the Rehabilitation Act require schools and colleges to provide equal
+access, and Section 508 sets accessibility requirements for federal
+technology. Many other countries have similar laws.
+
+PRACTICAL CHECKLIST
+
+- Add alternative text (alt text) to meaningful images.
+- Provide captions for videos and transcripts for audio.
+- Use real headings and lists instead of only bold or large text, so
+  screen readers can navigate the page.
+- Make sure every feature works with a keyboard alone.
+- Keep enough color contrast between text and background.
+- Do not use color as the only way to convey information.
+- Use descriptive link text such as "Download the syllabus" instead of
+  "click here."
+- Avoid time limits that cannot be extended.
+
+UNIVERSAL DESIGN FOR LEARNING
+
+Universal Design for Learning (UDL) is a framework that encourages
+teachers to plan for variety from the start instead of fixing problems
+one student at a time. It recommends offering multiple ways to engage
+with material, multiple ways to represent information, and multiple ways
+for students to show what they have learned.
